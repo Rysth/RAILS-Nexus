@@ -152,6 +152,36 @@ export default function AppSidebar({
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
+              {canViewClients && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip="Clientes"
+                    isActive={isActiveRoute("/dashboard/clients")}
+                  >
+                    <NavLink to="/dashboard/clients">
+                      <Building2 />
+                      <span>Clientes</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+
+              {canViewProjects && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip="Proyectos"
+                    isActive={isActiveRoute("/dashboard/projects")}
+                  >
+                    <NavLink to="/dashboard/projects">
+                      <FolderKanban />
+                      <span>Proyectos</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+
               <SidebarMenuItem>
                 <SidebarMenuButton
                   tooltip="Configuración"
@@ -200,44 +230,6 @@ export default function AppSidebar({
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-
-        {(canViewClients || canViewProjects) && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Gestión</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {canViewClients && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip="Clientes"
-                      isActive={isActiveRoute("/dashboard/clients")}
-                    >
-                      <NavLink to="/dashboard/clients">
-                        <Building2 />
-                        <span>Clientes</span>
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-                {canViewProjects && (
-                  <SidebarMenuItem>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip="Proyectos"
-                      isActive={isActiveRoute("/dashboard/projects")}
-                    >
-                      <NavLink to="/dashboard/projects">
-                        <FolderKanban />
-                        <span>Proyectos</span>
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
       </SidebarContent>
 
       <SidebarFooter>
