@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useClientStore } from "../../../stores/clientStore";
 import { useAuthStore } from "../../../stores/authStore";
+import ProjectsCreate from "../projects/ProjectsCreate";
 import toast from "react-hot-toast";
 import {
   ArrowLeft,
@@ -13,6 +14,7 @@ import {
   ExternalLink,
   Pencil,
   FolderKanban,
+  Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -73,6 +75,8 @@ export default function ClientsDetail() {
   const { currentClient, isLoading, fetchClient } = useClientStore();
   const { hasPermission } = useAuthStore();
   const canEdit = hasPermission("edit_clients");
+  const canCreateProjects = hasPermission("create_projects");
+  const [createProjectOpen, setCreateProjectOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -87,6 +91,11 @@ export default function ClientsDetail() {
       navigate("/dashboard/clients", { replace: true });
     });
   }, [id, fetchClient, navigate]);
+
+  const handleProjectCreated = () => {
+    setCreateProjectOpen(false);
+    if (id) fetchClient(Number(id));
+  };
 
   // ── Loading skeleton ──────────────────────────────────────
 
@@ -248,13 +257,23 @@ export default function ClientsDetail() {
         {/* Right column – Projects table */}
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FolderKanban className="size-5" />
-              Proyectos
-            </CardTitle>
-            <CardDescription>
-              Proyectos asociados a {currentClient.name}
-            </CardDescription>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <FolderKanban className="size-5" />
+                  Proyectos
+                </CardTitle>
+                <CardDescription>
+                  Proyectos asociados a {currentClient.name}
+                </CardDescription>
+              </div>
+              {canCreateProjects && (
+                <Button size="sm" onClick={() => setCreateProjectOpen(true)}>
+                  <Plus className="mr-2 size-4" />
+                  Nuevo Proyecto
+                </Button>
+              )}
+            </div>
           </CardHeader>
 
           <CardContent>
@@ -325,6 +344,13 @@ export default function ClientsDetail() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Create Project Dialog */}
+      <ProjectsCreate
+        isOpen={createProjectOpen}
+        defaultClientId={currentClient.id}
+        onClose={handleProjectCreated}
+      />
     </div>
   );
 }

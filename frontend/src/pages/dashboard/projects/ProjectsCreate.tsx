@@ -8,11 +8,13 @@ import ProjectsForm from "./ProjectsForm";
 
 interface ProjectsCreateProps {
   isOpen: boolean;
+  defaultClientId?: number;
   onClose: () => void;
 }
 
 export default function ProjectsCreate({
   isOpen,
+  defaultClientId,
   onClose,
 }: ProjectsCreateProps) {
   return (
@@ -21,7 +23,7 @@ export default function ProjectsCreate({
         <DialogHeader>
           <DialogTitle>Nuevo Proyecto</DialogTitle>
         </DialogHeader>
-        <ProjectsForm onClose={onClose} />
+        <ProjectsForm defaultClientId={defaultClientId} onClose={onClose} />
       </DialogContent>
     </Dialog>
   );

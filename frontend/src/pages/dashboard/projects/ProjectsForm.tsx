@@ -11,10 +11,15 @@ import { Label } from "@/components/ui/label";
 
 interface ProjectsFormProps {
   project?: Project | null;
+  defaultClientId?: number;
   onClose: () => void;
 }
 
-export default function ProjectsForm({ project, onClose }: ProjectsFormProps) {
+export default function ProjectsForm({
+  project,
+  defaultClientId,
+  onClose,
+}: ProjectsFormProps) {
   const {
     isLoading: storeLoading,
     createProject,
@@ -43,14 +48,14 @@ export default function ProjectsForm({ project, onClose }: ProjectsFormProps) {
       });
     } else {
       reset({
-        client_id: "",
+        client_id: defaultClientId || "",
         name: "",
         production_url: "",
         start_date: "",
         status: "active",
       });
     }
-  }, [isEditing, project, reset]);
+  }, [isEditing, project, defaultClientId, reset]);
 
   const onSubmit = async (data: ProjectFormData) => {
     setIsLoading(true);
