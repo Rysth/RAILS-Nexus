@@ -32,6 +32,8 @@ export default function DashboardLayout() {
     Permissions.EDIT_PROFILE,
   );
   const canManageUsers = hasPermission(Permissions.VIEW_USERS);
+  const canViewClients = hasPermission(Permissions.VIEW_CLIENTS);
+  const canViewProjects = hasPermission(Permissions.VIEW_PROJECTS);
 
   // Generate breadcrumbs based on current path
   const getBreadcrumbs = () => {
@@ -42,6 +44,10 @@ export default function DashboardLayout() {
       return { section: "Dashboard", page: "Usuarios" };
     } else if (path === "/dashboard/settings") {
       return { section: "Dashboard", page: "Configuración" };
+    } else if (path === "/dashboard/clients") {
+      return { section: "Dashboard", page: "Clientes" };
+    } else if (path === "/dashboard/projects") {
+      return { section: "Dashboard", page: "Proyectos" };
     }
     return { section: "Dashboard", page: "Panel de Control" };
   };
@@ -62,6 +68,8 @@ export default function DashboardLayout() {
         <AppSidebar
           user={user}
           canManageUsers={canManageUsers}
+          canViewClients={canViewClients}
+          canViewProjects={canViewProjects}
           setLogoutModalOpen={setLogoutModalOpen}
         />
         <SidebarInset>

@@ -17,6 +17,18 @@ class Permission < ApplicationRecord
   DELETE_USERS  = "delete_users".freeze
   EXPORT_USERS  = "export_users".freeze
 
+  # Clients
+  VIEW_CLIENTS    = "view_clients".freeze
+  CREATE_CLIENTS  = "create_clients".freeze
+  EDIT_CLIENTS    = "edit_clients".freeze
+  DELETE_CLIENTS  = "delete_clients".freeze
+
+  # Projects
+  VIEW_PROJECTS   = "view_projects".freeze
+  CREATE_PROJECTS = "create_projects".freeze
+  EDIT_PROJECTS   = "edit_projects".freeze
+  DELETE_PROJECTS = "delete_projects".freeze
+
   # Business
   VIEW_BUSINESS = "view_business".freeze
   EDIT_BUSINESS = "edit_business".freeze
@@ -27,6 +39,8 @@ class Permission < ApplicationRecord
   ALL_KEYS = [
     VIEW_DASHBOARD,
     VIEW_USERS, CREATE_USERS, EDIT_USERS, DELETE_USERS, EXPORT_USERS,
+    VIEW_CLIENTS, CREATE_CLIENTS, EDIT_CLIENTS, DELETE_CLIENTS,
+    VIEW_PROJECTS, CREATE_PROJECTS, EDIT_PROJECTS, DELETE_PROJECTS,
     VIEW_BUSINESS, EDIT_BUSINESS,
     EDIT_PROFILE
   ].freeze
@@ -37,11 +51,14 @@ class Permission < ApplicationRecord
     "manager" => [
       VIEW_DASHBOARD,
       VIEW_USERS, CREATE_USERS, EDIT_USERS, DELETE_USERS, EXPORT_USERS,
+      VIEW_CLIENTS, CREATE_CLIENTS, EDIT_CLIENTS, DELETE_CLIENTS,
+      VIEW_PROJECTS, CREATE_PROJECTS, EDIT_PROJECTS, DELETE_PROJECTS,
       VIEW_BUSINESS, EDIT_BUSINESS,
       EDIT_PROFILE
     ],
     "operator" => [
       VIEW_DASHBOARD,
+      VIEW_CLIENTS, VIEW_PROJECTS,
       EDIT_PROFILE
     ],
     "user" => [
@@ -61,6 +78,18 @@ class Permission < ApplicationRecord
       { key: EDIT_USERS, name: "Editar Usuarios", group: "users", description: "Editar usuarios existentes" },
       { key: DELETE_USERS, name: "Eliminar Usuarios", group: "users", description: "Eliminar usuarios" },
       { key: EXPORT_USERS, name: "Exportar Usuarios", group: "users", description: "Exportar datos de usuarios" },
+
+      # Clients
+      { key: VIEW_CLIENTS, name: "Ver Clientes", group: "clients", description: "Ver la lista de clientes" },
+      { key: CREATE_CLIENTS, name: "Crear Clientes", group: "clients", description: "Crear nuevos clientes" },
+      { key: EDIT_CLIENTS, name: "Editar Clientes", group: "clients", description: "Editar clientes existentes" },
+      { key: DELETE_CLIENTS, name: "Eliminar Clientes", group: "clients", description: "Eliminar clientes" },
+
+      # Projects
+      { key: VIEW_PROJECTS, name: "Ver Proyectos", group: "projects", description: "Ver la lista de proyectos" },
+      { key: CREATE_PROJECTS, name: "Crear Proyectos", group: "projects", description: "Crear nuevos proyectos" },
+      { key: EDIT_PROJECTS, name: "Editar Proyectos", group: "projects", description: "Editar proyectos existentes" },
+      { key: DELETE_PROJECTS, name: "Eliminar Proyectos", group: "projects", description: "Eliminar proyectos" },
 
       # Business
       { key: VIEW_BUSINESS, name: "Ver Negocio", group: "business", description: "Ver configuración del negocio" },

@@ -502,26 +502,13 @@ export default function AuthSignIn() {
         </div>
       </form>
 
-      <div className="space-y-4">
-        <div className="flex flex-col gap-2 text-center">
-          <div className="flex items-center justify-center gap-1 text-sm">
-            <p className="text-neutral-500">¿No tienes una cuenta?</p>
-            <Link
-              to="/auth/signup"
-              className="text-blue-600 hover:text-blue-800 hover:underline"
-            >
-              Crear una cuenta
-            </Link>
-          </div>
-          <div className="flex items-center justify-center gap-1 text-sm">
-            <Link
-              to="/auth/confirm"
-              className="text-blue-600 hover:text-blue-800 hover:underline"
-            >
-              ¿No recibiste las instrucciones de confirmación?
-            </Link>
-          </div>
-        </div>
+      <div className="flex items-center justify-center gap-1 text-sm text-center">
+        <Link
+          to="/auth/confirm"
+          className="text-blue-600 hover:text-blue-800 hover:underline"
+        >
+          ¿No recibiste las instrucciones de confirmación?
+        </Link>
       </div>
     </>
   );

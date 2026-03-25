@@ -4,9 +4,10 @@ import AuthLayout from "../layouts/AuthLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../pages/dashboard/Dashboard";
 import UsersIndex from "../pages/dashboard/users/UsersIndex";
+import ClientsIndex from "../pages/dashboard/clients/ClientsIndex";
+import ProjectsIndex from "../pages/dashboard/projects/ProjectsIndex";
 import BusinessSettings from "../pages/dashboard/business/BusinessSettings";
 import AuthSignIn from "../pages/auth/AuthSignIn";
-import AuthSignUp from "../pages/auth/AuthSignUp";
 import AuthConfirm from "../pages/auth/AuthConfirm";
 import AuthForgotPassword from "../pages/auth/AuthForgotPassword";
 import AuthResetPassword from "../pages/auth/AuthResetPassword";
@@ -31,7 +32,6 @@ export const router = createBrowserRouter([
     errorElement: <ErrorBoundary />,
     children: [
       { path: "signin", element: <AuthSignIn /> },
-      { path: "signup", element: <AuthSignUp /> },
       { path: "confirm", element: <AuthConfirm /> },
       { path: "verify-email", element: <AuthVerifyEmail /> },
       { path: "forgot-password", element: <AuthForgotPassword /> },
@@ -75,7 +75,22 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      // Add more dashboard routes here
+      {
+        path: "clients",
+        element: (
+          <ProtectedRoute requiredPermission={Permissions.VIEW_CLIENTS}>
+            <ClientsIndex />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "projects",
+        element: (
+          <ProtectedRoute requiredPermission={Permissions.VIEW_PROJECTS}>
+            <ProjectsIndex />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   {

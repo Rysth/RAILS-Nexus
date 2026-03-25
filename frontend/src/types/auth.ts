@@ -44,9 +44,11 @@ export const Permissions = {
 	EDIT_USERS: "edit_users",
 	DELETE_USERS: "delete_users",
 	EXPORT_USERS: "export_users",
-	VIEW_BUSINESS: "view_business",
-	EDIT_BUSINESS: "edit_business",
-	EDIT_PROFILE: "edit_profile",
-} as const;
-
-export type PermissionKey = (typeof Permissions)[keyof typeof Permissions];
+  VIEW_CLIENTS: "view_clients",
+  CREATE_CLIENTS: "create_clients",
+  EDIT_CLIENTS: "edit_clients",
+  DELETE_CLIENTS: "delete_clients",
+  VIEW_PROJECTS: "view_projects",
+  CREATE_PROJECTS: "create_projects",
+  EDIT_PROJECTS: "edit_projects",
+  DELETE_PROJECTS: "delete_projects",

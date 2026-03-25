@@ -36,6 +36,9 @@ Rails.application.routes.draw do
         get :stats
       end
       
+      resources :clients
+      resources :projects
+
       resources :businesses, only: [:show, :update] do
         collection do
           get :current

@@ -8,6 +8,8 @@ import {
   LogOut,
   ChevronsUpDown,
   ChevronRight,
+  Building2,
+  FolderKanban,
 } from "lucide-react";
 import {
   Sidebar,
@@ -40,6 +42,8 @@ import logo from "../../assets/logo.svg";
 interface AppSidebarProps {
   user: any;
   canManageUsers: boolean;
+  canViewClients: boolean;
+  canViewProjects: boolean;
   setLogoutModalOpen: (open: boolean) => void;
 }
 
@@ -57,6 +61,8 @@ const getInitials = (fullname: string): string => {
 export default function AppSidebar({
   user,
   canManageUsers,
+  canViewClients,
+  canViewProjects,
   setLogoutModalOpen,
 }: AppSidebarProps) {
   // Fetch business data so we can show logo + name (cached in store)
@@ -194,6 +200,44 @@ export default function AppSidebar({
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {(canViewClients || canViewProjects) && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Gestión</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {canViewClients && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip="Clientes"
+                      isActive={isActiveRoute("/dashboard/clients")}
+                    >
+                      <NavLink to="/dashboard/clients">
+                        <Building2 />
+                        <span>Clientes</span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+                {canViewProjects && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip="Proyectos"
+                      isActive={isActiveRoute("/dashboard/projects")}
+                    >
+                      <NavLink to="/dashboard/projects">
+                        <FolderKanban />
+                        <span>Proyectos</span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
 
       <SidebarFooter>
