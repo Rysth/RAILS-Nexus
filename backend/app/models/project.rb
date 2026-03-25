@@ -1,5 +1,5 @@
 class Project < ApplicationRecord
-  belongs_to :client
+  belongs_to :client, counter_cache: true
 
   enum :status, { active: 0, maintenance: 1, canceled: 2 }
 
