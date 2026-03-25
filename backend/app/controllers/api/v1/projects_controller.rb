@@ -81,7 +81,11 @@ module Api
       def search_params
         search = {}
         search[:name_or_client_name_cont] = params[:search] if params[:search].present?
-        search[:status_eq] = params[:status] if params[:status].present?
+        
+        if params[:status].present?
+          search[:status_eq] = Project.statuses[params[:status]] || params[:status]
+        end
+        
         search[:client_id_eq] = params[:client_id] if params[:client_id].present?
         search
       end

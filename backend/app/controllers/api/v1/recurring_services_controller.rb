@@ -81,8 +81,15 @@ module Api
       def search_params
         search = {}
         search[:name_cont] = params[:search] if params[:search].present?
-        search[:status_eq] = params[:status] if params[:status].present?
-        search[:billing_cycle_eq] = params[:billing_cycle] if params[:billing_cycle].present?
+        
+        if params[:status].present?
+          search[:status_eq] = RecurringService.statuses[params[:status]] || params[:status]
+        end
+        
+        if params[:billing_cycle].present?
+          search[:billing_cycle_eq] = RecurringService.billing_cycles[params[:billing_cycle]] || params[:billing_cycle]
+        end
+        
         search[:project_id_eq] = params[:project_id] if params[:project_id].present?
         search
       end
