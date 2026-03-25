@@ -56,6 +56,10 @@ export const Permissions = {
   CREATE_RECURRING_SERVICES: "create_recurring_services",
   EDIT_RECURRING_SERVICES: "edit_recurring_services",
   DELETE_RECURRING_SERVICES: "delete_recurring_services",
+  VIEW_QUOTES: "view_quotes",
+  CREATE_QUOTES: "create_quotes",
+  EDIT_QUOTES: "edit_quotes",
+  DELETE_QUOTES: "delete_quotes",
   EDIT_PROFILE: "edit_profile",
   VIEW_BUSINESS: "view_business",
 } as const;

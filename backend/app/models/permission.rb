@@ -35,6 +35,12 @@ class Permission < ApplicationRecord
   EDIT_RECURRING_SERVICES   = "edit_recurring_services".freeze
   DELETE_RECURRING_SERVICES = "delete_recurring_services".freeze
 
+  # Quotes
+  VIEW_QUOTES   = "view_quotes".freeze
+  CREATE_QUOTES = "create_quotes".freeze
+  EDIT_QUOTES   = "edit_quotes".freeze
+  DELETE_QUOTES = "delete_quotes".freeze
+
   # Business
   VIEW_BUSINESS = "view_business".freeze
   EDIT_BUSINESS = "edit_business".freeze
@@ -48,6 +54,7 @@ class Permission < ApplicationRecord
     VIEW_CLIENTS, CREATE_CLIENTS, EDIT_CLIENTS, DELETE_CLIENTS,
     VIEW_PROJECTS, CREATE_PROJECTS, EDIT_PROJECTS, DELETE_PROJECTS,
     VIEW_RECURRING_SERVICES, CREATE_RECURRING_SERVICES, EDIT_RECURRING_SERVICES, DELETE_RECURRING_SERVICES,
+    VIEW_QUOTES, CREATE_QUOTES, EDIT_QUOTES, DELETE_QUOTES,
     VIEW_BUSINESS, EDIT_BUSINESS,
     EDIT_PROFILE
   ].freeze
@@ -61,12 +68,13 @@ class Permission < ApplicationRecord
       VIEW_CLIENTS, CREATE_CLIENTS, EDIT_CLIENTS, DELETE_CLIENTS,
       VIEW_PROJECTS, CREATE_PROJECTS, EDIT_PROJECTS, DELETE_PROJECTS,
       VIEW_RECURRING_SERVICES, CREATE_RECURRING_SERVICES, EDIT_RECURRING_SERVICES, DELETE_RECURRING_SERVICES,
+      VIEW_QUOTES, CREATE_QUOTES, EDIT_QUOTES, DELETE_QUOTES,
       VIEW_BUSINESS, EDIT_BUSINESS,
       EDIT_PROFILE
     ],
     "operator" => [
       VIEW_DASHBOARD,
-      VIEW_CLIENTS, VIEW_PROJECTS, VIEW_RECURRING_SERVICES,
+      VIEW_CLIENTS, VIEW_PROJECTS, VIEW_RECURRING_SERVICES, VIEW_QUOTES,
       EDIT_PROFILE
     ],
     "user" => [
@@ -104,6 +112,12 @@ class Permission < ApplicationRecord
       { key: CREATE_RECURRING_SERVICES, name: "Crear Servicios Recurrentes", group: "recurring_services", description: "Crear nuevos servicios recurrentes" },
       { key: EDIT_RECURRING_SERVICES, name: "Editar Servicios Recurrentes", group: "recurring_services", description: "Editar servicios recurrentes existentes" },
       { key: DELETE_RECURRING_SERVICES, name: "Eliminar Servicios Recurrentes", group: "recurring_services", description: "Eliminar servicios recurrentes" },
+
+      # Quotes
+      { key: VIEW_QUOTES, name: "Ver Cotizaciones", group: "quotes", description: "Ver la lista de cotizaciones" },
+      { key: CREATE_QUOTES, name: "Crear Cotizaciones", group: "quotes", description: "Crear nuevas cotizaciones" },
+      { key: EDIT_QUOTES, name: "Editar Cotizaciones", group: "quotes", description: "Editar cotizaciones existentes" },
+      { key: DELETE_QUOTES, name: "Eliminar Cotizaciones", group: "quotes", description: "Eliminar cotizaciones" },
 
       # Business
       { key: VIEW_BUSINESS, name: "Ver Negocio", group: "business", description: "Ver configuración del negocio" },

@@ -37,6 +37,7 @@ export default function DashboardLayout() {
   const canViewRecurringServices = hasPermission(
     Permissions.VIEW_RECURRING_SERVICES,
   );
+  const canViewQuotes = hasPermission(Permissions.VIEW_QUOTES);
 
   // Generate breadcrumbs based on current path
   const getBreadcrumbs = () => {
@@ -55,6 +56,8 @@ export default function DashboardLayout() {
       return { section: "Dashboard", page: "Proyectos" };
     } else if (path === "/dashboard/recurring-services") {
       return { section: "Dashboard", page: "Servicios Recurrentes" };
+    } else if (path === "/dashboard/quotes") {
+      return { section: "Dashboard", page: "Cotizaciones" };
     }
     return { section: "Dashboard", page: "Panel de Control" };
   };
@@ -78,6 +81,7 @@ export default function DashboardLayout() {
           canViewClients={canViewClients}
           canViewProjects={canViewProjects}
           canViewRecurringServices={canViewRecurringServices}
+          canViewQuotes={canViewQuotes}
           setLogoutModalOpen={setLogoutModalOpen}
         />
         <SidebarInset>

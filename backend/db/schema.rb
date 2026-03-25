@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_25_194903) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_25_204049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -135,6 +135,28 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_25_194903) do
     t.index ["status"], name: "index_projects_on_status"
   end
 
+  create_table "quote_items", force: :cascade do |t|
+    t.bigint "quote_id", null: false
+    t.string "description", null: false
+    t.integer "quantity", default: 1, null: false
+    t.decimal "unit_price", precision: 10, scale: 2, null: false
+    t.decimal "subtotal", precision: 10, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quote_id"], name: "index_quote_items_on_quote_id"
+  end
+
+  create_table "quotes", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.date "issue_date", null: false
+    t.date "valid_until"
+    t.integer "status", default: 0, null: false
+    t.decimal "total", precision: 10, scale: 2, default: "0.0", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_quotes_on_project_id"
+  end
+
   create_table "recurring_services", force: :cascade do |t|
     t.bigint "project_id", null: false
     t.string "name", null: false
@@ -195,6 +217,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_25_194903) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "otp_codes", "accounts"
   add_foreign_key "projects", "clients"
+  add_foreign_key "quote_items", "quotes"
+  add_foreign_key "quotes", "projects"
   add_foreign_key "recurring_services", "projects"
   add_foreign_key "role_permissions", "permissions"
   add_foreign_key "role_permissions", "roles"

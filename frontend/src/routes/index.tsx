@@ -12,6 +12,7 @@ import ClientsIndex from "../pages/dashboard/clients/ClientsIndex";
 import ClientsDetail from "../pages/dashboard/clients/ClientsDetail";
 import ProjectsIndex from "../pages/dashboard/projects/ProjectsIndex";
 import RecurringServicesIndex from "../pages/dashboard/recurring-services/RecurringServicesIndex";
+import QuotesIndex from "../pages/dashboard/quotes/QuotesIndex";
 import BusinessSettings from "../pages/dashboard/business/BusinessSettings";
 import AuthSignIn from "../pages/auth/AuthSignIn";
 import AuthConfirm from "../pages/auth/AuthConfirm";
@@ -111,6 +112,14 @@ export const router = createBrowserRouter([
             requiredPermission={Permissions.VIEW_RECURRING_SERVICES}
           >
             <RecurringServicesIndex />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "quotes",
+        element: (
+          <ProtectedRoute requiredPermission={Permissions.VIEW_QUOTES}>
+            <QuotesIndex />
           </ProtectedRoute>
         ),
       },

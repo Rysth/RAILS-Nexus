@@ -1,6 +1,7 @@
 class Project < ApplicationRecord
   belongs_to :client, counter_cache: true
   has_many :recurring_services, dependent: :destroy
+  has_many :quotes, dependent: :destroy
 
   enum :status, { active: 0, maintenance: 1, canceled: 2 }
 

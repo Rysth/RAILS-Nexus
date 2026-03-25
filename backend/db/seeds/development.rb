@@ -11,6 +11,8 @@ puts "🌱 Seeding development database..."
 
 # Clear existing data
 puts "Clearing existing data..."
+QuoteItem.destroy_all
+Quote.destroy_all
 RecurringService.destroy_all
 Project.destroy_all
 Client.destroy_all
@@ -172,6 +174,54 @@ all_projects.select { |p| p.status != "canceled" }.each do |project|
   end
 end
 
+# Create Quotes for Projects
+puts "Creating quotes..."
+quote_statuses = [:draft, :sent, :approved, :rejected]
+item_descriptions = [
+  "Diseño de página principal",
+  "Desarrollo de módulo de usuarios",
+  "Integración con API de pagos",
+  "Configuración de servidor",
+  "Diseño de logotipo",
+  "Desarrollo de landing page",
+  "Optimización de rendimiento",
+  "Migración de base de datos",
+  "Configuración de DNS y SSL",
+  "Capacitación del equipo",
+  "Mantenimiento mensual (3 meses)",
+  "Soporte técnico premium",
+  "Desarrollo de app móvil",
+  "Diseño de interfaz de usuario",
+  "Pruebas de calidad (QA)"
+]
+
+all_projects.each do |project|
+  rand(1..3).times do
+    issue_date = rand(1..90).days.ago.to_date
+    status = quote_statuses.sample
+
+    quote = Quote.new(
+      project: project,
+      issue_date: issue_date,
+      valid_until: issue_date + 30.days,
+      status: status
+    )
+
+    rand(2..5).times do
+      quantity = rand(1..10)
+      unit_price = [50.00, 100.00, 150.00, 250.00, 500.00, 750.00, 1000.00].sample
+
+      quote.quote_items.build(
+        description: item_descriptions.sample,
+        quantity: quantity,
+        unit_price: unit_price
+      )
+    end
+
+    quote.save!
+  end
+end
+
 puts ""
 puts "=" * 60
 puts "✅ Development database seeded successfully!"
@@ -188,6 +238,7 @@ puts "   • 20 unverified users: user1@example.com through user20@example.com (
 puts ""
 puts "🏢 Created #{Client.count} clients with #{Project.count} projects"
 puts "🔄 Created #{RecurringService.count} recurring services"
+puts "📄 Created #{Quote.count} quotes with #{QuoteItem.count} items"
 puts ""
 puts "🔑 All accounts have password: password123"
 puts "=" * 60
