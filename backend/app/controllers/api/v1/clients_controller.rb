@@ -16,8 +16,7 @@ module Api
         page = params[:page] || 1
         per_page = params[:per_page] || 12
 
-        @pagy, @clients = pagy(@q.result(distinct: true), page: page, limit: per_page)
-
+        @pagy, @clients = pagy(@q.result(distinct: true).includes(:projects), page: page, limit: per_page)
         clients = @clients.map { |client| client_json(client) }
 
         render json: {
