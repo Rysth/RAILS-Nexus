@@ -1,7 +1,8 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -17,6 +18,7 @@ import type { Client } from "../../../types/client";
 interface ColumnsProps {
   onEdit: (client: Client) => void;
   onDelete: (client: Client) => void;
+  onView: (client: Client) => void;
   canManageClients: boolean;
   canDeleteClients: boolean;
 }
@@ -33,6 +35,7 @@ const getIdTypeConfig = (type: string) => {
 export const createClientsColumns = ({
   onEdit,
   onDelete,
+  onView,
   canManageClients,
   canDeleteClients,
 }: ColumnsProps): ColumnDef<Client>[] => [
@@ -43,7 +46,12 @@ export const createClientsColumns = ({
       const client = row.original;
       return (
         <div className="flex flex-col">
-          <span className="font-medium">{client.name}</span>
+          <Link
+            to={`/dashboard/clients/${client.id}`}
+            className="font-medium hover:underline text-primary"
+          >
+            {client.name}
+          </Link>
           {client.email && (
             <span className="text-xs text-muted-foreground">
               {client.email}
@@ -101,6 +109,10 @@ export const createClientsColumns = ({
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => onView(client)}>
+                    <Eye className="mr-2 h-4 w-4" />
+                    Ver detalle
+                  </DropdownMenuItem>
                   {canManageClients && (
                     <DropdownMenuItem onClick={() => onEdit(client)}>
                       Editar cliente

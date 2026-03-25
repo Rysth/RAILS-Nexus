@@ -8,6 +8,17 @@ export interface Client {
   phone: string;
   address: string;
   projects_count: number;
+  projects?: ClientProject[];
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClientProject {
+  id: number;
+  name: string;
+  production_url: string;
+  start_date: string;
+  status: string;
   created_at: string;
   updated_at: string;
 }

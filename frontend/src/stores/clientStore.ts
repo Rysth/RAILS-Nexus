@@ -16,6 +16,7 @@ interface ClientFilters {
 
 interface ClientState {
   clients: Client[];
+  currentClient: Client | null;
   isLoading: boolean;
   error: string | null;
   pagination: Pagination;
@@ -25,6 +26,7 @@ interface ClientState {
     perPage?: number,
     filters?: ClientFilters
   ) => Promise<void>;
+  fetchClient: (id: number) => Promise<void>;
   createClient: (data: ClientFormData) => Promise<void>;
   updateClient: (id: number, data: ClientFormData) => Promise<void>;
   deleteClient: (id: number) => Promise<void>;
@@ -32,6 +34,7 @@ interface ClientState {
 
 export const useClientStore = create<ClientState>((set, get) => ({
   clients: [],
+  currentClient: null,
   isLoading: false,
   error: null,
   pagination: {
@@ -62,6 +65,23 @@ export const useClientStore = create<ClientState>((set, get) => ({
       throw new Error("Error al obtener clientes");
     } catch (error: any) {
       const message = error.response?.data?.message || "Error al obtener clientes";
+      set({ error: message, isLoading: false });
+      throw error;
+    }
+  },
+
+  fetchClient: async (id: number) => {
+    set({ isLoading: true, error: null, currentClient: null });
+    try {
+      const response = await api.get(`/api/v1/clients/${id}`);
+
+      if (response.status === 200) {
+        set({ currentClient: response.data.client, isLoading: false });
+        return;
+      }
+      throw new Error("Error al obtener cliente");
+    } catch (error: any) {
+      const message = error.response?.data?.message || "Error al obtener cliente";
       set({ error: message, isLoading: false });
       throw error;
     }

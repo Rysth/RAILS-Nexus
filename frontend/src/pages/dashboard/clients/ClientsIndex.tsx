@@ -1,4 +1,5 @@
 import { useEffect, useRef, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../stores/authStore";
 import { useClientStore } from "../../../stores/clientStore";
 import { toast } from "react-hot-toast";
@@ -78,6 +79,7 @@ function clientsReducer(
 export default function ClientsIndex() {
   const { hasPermission } = useAuthStore();
   const { clients, isLoading, fetchClients, pagination } = useClientStore();
+  const navigate = useNavigate();
 
   const [state, dispatch] = useReducer(clientsReducer, initialState);
   const isMounted = useRef(false);
@@ -108,6 +110,10 @@ export default function ClientsIndex() {
     loadClients();
   }, [fetchClients, state.perPage, state.searchTerm, state.filters]);
 
+  const handleViewClick = (client: Client) => {
+    navigate(`/dashboard/clients/${client.id}`);
+  };
+
   const handleDeleteClick = (client: Client) => {
     if (client.projects_count > 0) {
       toast.error("No se puede eliminar un cliente con proyectos asociados");
@@ -137,6 +143,7 @@ export default function ClientsIndex() {
   const columns = createClientsColumns({
     onEdit: handleEditClick,
     onDelete: handleDeleteClick,
+    onView: handleViewClick,
     canManageClients: !!canManageClients,
     canDeleteClients: !!canDeleteClients,
   });

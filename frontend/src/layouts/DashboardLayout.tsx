@@ -46,6 +46,8 @@ export default function DashboardLayout() {
       return { section: "Dashboard", page: "Configuración" };
     } else if (path === "/dashboard/clients") {
       return { section: "Dashboard", page: "Clientes" };
+    } else if (path.startsWith("/dashboard/clients/")) {
+      return { section: "Clientes", page: "Detalle del Cliente" };
     } else if (path === "/dashboard/projects") {
       return { section: "Dashboard", page: "Proyectos" };
     }
@@ -83,7 +85,13 @@ export default function DashboardLayout() {
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="/dashboard">
+                    <BreadcrumbLink
+                      href={
+                        breadcrumbs.section === "Clientes"
+                          ? "/dashboard/clients"
+                          : "/dashboard"
+                      }
+                    >
                       {breadcrumbs.section}
                     </BreadcrumbLink>
                   </BreadcrumbItem>

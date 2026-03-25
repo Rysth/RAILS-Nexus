@@ -9,6 +9,7 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../pages/dashboard/Dashboard";
 import UsersIndex from "../pages/dashboard/users/UsersIndex";
 import ClientsIndex from "../pages/dashboard/clients/ClientsIndex";
+import ClientsDetail from "../pages/dashboard/clients/ClientsDetail";
 import ProjectsIndex from "../pages/dashboard/projects/ProjectsIndex";
 import BusinessSettings from "../pages/dashboard/business/BusinessSettings";
 import AuthSignIn from "../pages/auth/AuthSignIn";
@@ -83,6 +84,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute requiredPermission={Permissions.VIEW_CLIENTS}>
             <ClientsIndex />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "clients/:id",
+        element: (
+          <ProtectedRoute requiredPermission={Permissions.VIEW_CLIENTS}>
+            <ClientsDetail />
           </ProtectedRoute>
         ),
       },
