@@ -10,7 +10,7 @@ module Api
 
       # GET /api/v1/recurring_services
       def index
-        @q = RecurringService.includes(:project).ransack(search_params)
+        @q = RecurringService.includes(project: :client).ransack(search_params)
         @q.sorts = 'id desc' if @q.sorts.empty?
 
         page = params[:page] || 1
@@ -69,7 +69,7 @@ module Api
       private
 
       def set_recurring_service
-        @recurring_service = RecurringService.includes(:project).find(params[:id])
+        @recurring_service = RecurringService.includes(project: :client).find(params[:id])
       rescue ActiveRecord::RecordNotFound
         render json: { status: :error, message: 'Servicio recurrente no encontrado' }, status: :not_found
       end
