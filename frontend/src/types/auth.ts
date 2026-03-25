@@ -52,3 +52,6 @@ export const Permissions = {
   CREATE_PROJECTS: "create_projects",
   EDIT_PROJECTS: "edit_projects",
   DELETE_PROJECTS: "delete_projects",
+  EDIT_PROFILE: "edit_profile",
+  VIEW_BUSINESS: "view_business",
+} as const;
