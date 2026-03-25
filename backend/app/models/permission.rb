@@ -29,6 +29,12 @@ class Permission < ApplicationRecord
   EDIT_PROJECTS   = "edit_projects".freeze
   DELETE_PROJECTS = "delete_projects".freeze
 
+  # Recurring Services
+  VIEW_RECURRING_SERVICES   = "view_recurring_services".freeze
+  CREATE_RECURRING_SERVICES = "create_recurring_services".freeze
+  EDIT_RECURRING_SERVICES   = "edit_recurring_services".freeze
+  DELETE_RECURRING_SERVICES = "delete_recurring_services".freeze
+
   # Business
   VIEW_BUSINESS = "view_business".freeze
   EDIT_BUSINESS = "edit_business".freeze
@@ -41,6 +47,7 @@ class Permission < ApplicationRecord
     VIEW_USERS, CREATE_USERS, EDIT_USERS, DELETE_USERS, EXPORT_USERS,
     VIEW_CLIENTS, CREATE_CLIENTS, EDIT_CLIENTS, DELETE_CLIENTS,
     VIEW_PROJECTS, CREATE_PROJECTS, EDIT_PROJECTS, DELETE_PROJECTS,
+    VIEW_RECURRING_SERVICES, CREATE_RECURRING_SERVICES, EDIT_RECURRING_SERVICES, DELETE_RECURRING_SERVICES,
     VIEW_BUSINESS, EDIT_BUSINESS,
     EDIT_PROFILE
   ].freeze
@@ -53,12 +60,13 @@ class Permission < ApplicationRecord
       VIEW_USERS, CREATE_USERS, EDIT_USERS, DELETE_USERS, EXPORT_USERS,
       VIEW_CLIENTS, CREATE_CLIENTS, EDIT_CLIENTS, DELETE_CLIENTS,
       VIEW_PROJECTS, CREATE_PROJECTS, EDIT_PROJECTS, DELETE_PROJECTS,
+      VIEW_RECURRING_SERVICES, CREATE_RECURRING_SERVICES, EDIT_RECURRING_SERVICES, DELETE_RECURRING_SERVICES,
       VIEW_BUSINESS, EDIT_BUSINESS,
       EDIT_PROFILE
     ],
     "operator" => [
       VIEW_DASHBOARD,
-      VIEW_CLIENTS, VIEW_PROJECTS,
+      VIEW_CLIENTS, VIEW_PROJECTS, VIEW_RECURRING_SERVICES,
       EDIT_PROFILE
     ],
     "user" => [
@@ -90,6 +98,12 @@ class Permission < ApplicationRecord
       { key: CREATE_PROJECTS, name: "Crear Proyectos", group: "projects", description: "Crear nuevos proyectos" },
       { key: EDIT_PROJECTS, name: "Editar Proyectos", group: "projects", description: "Editar proyectos existentes" },
       { key: DELETE_PROJECTS, name: "Eliminar Proyectos", group: "projects", description: "Eliminar proyectos" },
+
+      # Recurring Services
+      { key: VIEW_RECURRING_SERVICES, name: "Ver Servicios Recurrentes", group: "recurring_services", description: "Ver la lista de servicios recurrentes" },
+      { key: CREATE_RECURRING_SERVICES, name: "Crear Servicios Recurrentes", group: "recurring_services", description: "Crear nuevos servicios recurrentes" },
+      { key: EDIT_RECURRING_SERVICES, name: "Editar Servicios Recurrentes", group: "recurring_services", description: "Editar servicios recurrentes existentes" },
+      { key: DELETE_RECURRING_SERVICES, name: "Eliminar Servicios Recurrentes", group: "recurring_services", description: "Eliminar servicios recurrentes" },
 
       # Business
       { key: VIEW_BUSINESS, name: "Ver Negocio", group: "business", description: "Ver configuración del negocio" },

@@ -10,6 +10,7 @@ import {
   ChevronRight,
   Building2,
   FolderKanban,
+  RefreshCw,
 } from "lucide-react";
 import {
   Sidebar,
@@ -44,6 +45,7 @@ interface AppSidebarProps {
   canManageUsers: boolean;
   canViewClients: boolean;
   canViewProjects: boolean;
+  canViewRecurringServices: boolean;
   setLogoutModalOpen: (open: boolean) => void;
 }
 
@@ -63,6 +65,7 @@ export default function AppSidebar({
   canManageUsers,
   canViewClients,
   canViewProjects,
+  canViewRecurringServices,
   setLogoutModalOpen,
 }: AppSidebarProps) {
   // Fetch business data so we can show logo + name (cached in store)
@@ -177,6 +180,21 @@ export default function AppSidebar({
                     <NavLink to="/dashboard/projects">
                       <FolderKanban />
                       <span>Proyectos</span>
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+
+              {canViewRecurringServices && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip="Servicios"
+                    isActive={isActiveRoute("/dashboard/recurring-services")}
+                  >
+                    <NavLink to="/dashboard/recurring-services">
+                      <RefreshCw />
+                      <span>Servicios</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

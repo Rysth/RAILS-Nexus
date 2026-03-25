@@ -11,6 +11,7 @@ import UsersIndex from "../pages/dashboard/users/UsersIndex";
 import ClientsIndex from "../pages/dashboard/clients/ClientsIndex";
 import ClientsDetail from "../pages/dashboard/clients/ClientsDetail";
 import ProjectsIndex from "../pages/dashboard/projects/ProjectsIndex";
+import RecurringServicesIndex from "../pages/dashboard/recurring-services/RecurringServicesIndex";
 import BusinessSettings from "../pages/dashboard/business/BusinessSettings";
 import AuthSignIn from "../pages/auth/AuthSignIn";
 import AuthConfirm from "../pages/auth/AuthConfirm";
@@ -100,6 +101,16 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute requiredPermission={Permissions.VIEW_PROJECTS}>
             <ProjectsIndex />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "recurring-services",
+        element: (
+          <ProtectedRoute
+            requiredPermission={Permissions.VIEW_RECURRING_SERVICES}
+          >
+            <RecurringServicesIndex />
           </ProtectedRoute>
         ),
       },

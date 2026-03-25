@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_25_193120) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_25_194903) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -135,6 +135,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_25_193120) do
     t.index ["status"], name: "index_projects_on_status"
   end
 
+  create_table "recurring_services", force: :cascade do |t|
+    t.bigint "project_id", null: false
+    t.string "name", null: false
+    t.decimal "amount", precision: 10, scale: 2, null: false
+    t.integer "billing_cycle", default: 0, null: false
+    t.date "next_billing_date"
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_recurring_services_on_project_id"
+  end
+
   create_table "role_permissions", force: :cascade do |t|
     t.bigint "role_id", null: false
     t.bigint "permission_id", null: false
@@ -183,6 +195,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_25_193120) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "otp_codes", "accounts"
   add_foreign_key "projects", "clients"
+  add_foreign_key "recurring_services", "projects"
   add_foreign_key "role_permissions", "permissions"
   add_foreign_key "role_permissions", "roles"
   add_foreign_key "users", "accounts"

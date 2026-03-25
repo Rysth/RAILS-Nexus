@@ -11,6 +11,7 @@ puts "🌱 Seeding development database..."
 
 # Clear existing data
 puts "Clearing existing data..."
+RecurringService.destroy_all
 Project.destroy_all
 Client.destroy_all
 User.destroy_all
@@ -117,18 +118,56 @@ end
 puts "Creating projects..."
 project_statuses = ["active", "maintenance", "canceled"]
 
+all_projects = []
 clients.each_with_index do |client, index|
   # Give each client between 1 and 3 projects
   rand(1..3).times do |i|
     status = project_statuses.sample
     project_number = i + 1
     
-    Project.create!(
+    project = Project.create!(
       client: client,
       name: "Proyecto #{client.name.split(' ').first} #{project_number}",
       status: status,
       production_url: status != "canceled" ? "https://proyecto#{project_number}-#{client.name.parameterize}.example.com" : nil,
       start_date: rand(1..24).months.ago
+    )
+    all_projects << project
+  end
+end
+
+# Create Recurring Services for active/maintenance Projects
+puts "Creating recurring services..."
+service_names = {
+  monthly: ["Mantenimiento Mensual", "Soporte Técnico", "Hosting Mensual", "Monitoreo de Servidor", "Backup Mensual"],
+  yearly: ["Hosting Anual", "Dominio Anual", "Certificado SSL", "Licencia Anual", "Soporte Premium Anual"],
+  unique: ["Desarrollo Inicial", "Migración de Datos", "Diseño UI/UX", "Configuración Inicial", "Capacitación"]
+}
+
+all_projects.select { |p| p.status != "canceled" }.each do |project|
+  rand(1..3).times do
+    cycle = [:monthly, :yearly, :unique].sample
+    name = service_names[cycle].sample
+
+    amount = case cycle
+             when :monthly then [25.00, 50.00, 75.00, 100.00, 150.00].sample
+             when :yearly then [120.00, 250.00, 500.00, 800.00].sample
+             when :unique then [200.00, 500.00, 1000.00, 2500.00, 5000.00].sample
+             end
+
+    next_date = case cycle
+                when :monthly then rand(1..30).days.from_now.to_date
+                when :yearly then rand(1..12).months.from_now.to_date
+                when :unique then nil
+                end
+
+    RecurringService.create!(
+      project: project,
+      name: "#{name} - #{project.name}",
+      amount: amount,
+      billing_cycle: cycle,
+      next_billing_date: next_date,
+      status: [:active, :paused].sample
     )
   end
 end
@@ -146,6 +185,9 @@ puts "   • 1 verified admin: admin@example.com (admin role)"
 puts "   • 1 verified manager: manager@example.com (manager role)"  
 puts "   • 1 verified operator: operator@example.com (operator role)"
 puts "   • 20 unverified users: user1@example.com through user20@example.com (user role)"
+puts ""
+puts "🏢 Created #{Client.count} clients with #{Project.count} projects"
+puts "🔄 Created #{RecurringService.count} recurring services"
 puts ""
 puts "🔑 All accounts have password: password123"
 puts "=" * 60

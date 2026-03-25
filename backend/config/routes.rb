@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       
       resources :clients
       resources :projects
+      resources :recurring_services
 
       resources :businesses, only: [:show, :update] do
         collection do

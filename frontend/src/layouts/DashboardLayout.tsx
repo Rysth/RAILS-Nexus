@@ -34,6 +34,9 @@ export default function DashboardLayout() {
   const canManageUsers = hasPermission(Permissions.VIEW_USERS);
   const canViewClients = hasPermission(Permissions.VIEW_CLIENTS);
   const canViewProjects = hasPermission(Permissions.VIEW_PROJECTS);
+  const canViewRecurringServices = hasPermission(
+    Permissions.VIEW_RECURRING_SERVICES,
+  );
 
   // Generate breadcrumbs based on current path
   const getBreadcrumbs = () => {
@@ -50,6 +53,8 @@ export default function DashboardLayout() {
       return { section: "Clientes", page: "Detalle del Cliente" };
     } else if (path === "/dashboard/projects") {
       return { section: "Dashboard", page: "Proyectos" };
+    } else if (path === "/dashboard/recurring-services") {
+      return { section: "Dashboard", page: "Servicios Recurrentes" };
     }
     return { section: "Dashboard", page: "Panel de Control" };
   };
@@ -72,6 +77,7 @@ export default function DashboardLayout() {
           canManageUsers={canManageUsers}
           canViewClients={canViewClients}
           canViewProjects={canViewProjects}
+          canViewRecurringServices={canViewRecurringServices}
           setLogoutModalOpen={setLogoutModalOpen}
         />
         <SidebarInset>
