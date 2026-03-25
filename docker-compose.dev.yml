@@ -3,7 +3,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
-    container_name: base-client
+    container_name: nexus-client
     ports:
       - "5173:5173"
     volumes:
@@ -15,11 +15,11 @@ services:
     depends_on:
       - server
     networks:
-      - base_network
+      - nexus_network
 
   server:
     build: ./backend
-    container_name: base-api
+    container_name: nexus-api
     ports:
       - "${PORT}:${PORT}"
     volumes:
@@ -50,11 +50,11 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - base_network
+      - nexus_network
 
   postgres:
     image: postgres:16-alpine
-    container_name: base-postgres
+    container_name: nexus-postgres
     # Do not publish Postgres to host to avoid port conflicts on the dokploy server.
     # Containers on the same compose network can connect to `postgres:5432` internally.
     environment:
@@ -70,11 +70,11 @@ services:
       retries: 5
       start_period: 10s
     networks:
-      - base_network
+      - nexus_network
 
   redis:
     image: redis:7-alpine
-    container_name: base-redis
+    container_name: nexus-redis
     ports:
       - "6379:6379"
     volumes:
@@ -86,11 +86,11 @@ services:
       retries: 5
       start_period: 5s
     networks:
-      - base_network
+      - nexus_network
 
   sidekiq-worker:
     build: ./backend
-    container_name: base-sidekiq
+    container_name: nexus-sidekiq
     volumes:
       - ./backend:/rails
       - ./backend/tmp:/rails/tmp
@@ -116,7 +116,7 @@ services:
       redis:
         condition: service_healthy
     networks:
-      - base_network
+      - nexus_network
 
 volumes:
   postgres_data:
@@ -124,5 +124,5 @@ volumes:
   letter_opener:
   redis_data:
 networks:
-  base_network:
+  nexus_network:
     driver: bridge

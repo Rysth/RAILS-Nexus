@@ -4,7 +4,7 @@ services:
       context: ./frontend
       args:
         VITE_API_URL: ${VITE_API_URL}
-    container_name: base-client
+    container_name: nexus-client
     ports:
       - "5173:5173"
     volumes:
@@ -16,7 +16,7 @@ services:
     depends_on:
       - server
     networks:
-      - base_network
+      - nexus_network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.client.rule=Host(`frontend.example.com`)"
@@ -26,7 +26,7 @@ services:
 
   server:
     build: ./backend
-    container_name: base-api
+    container_name: nexus-api
     ports:
       - "${PORT}:${PORT}"
     volumes:
@@ -51,7 +51,7 @@ services:
     command: bash -c "bundle install && rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p ${PORT} -b '0.0.0.0'"
     # Postgres is provided externally in production; ensure DATABASE_URL points to it.
     networks:
-      - base_network
+      - nexus_network
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.server.rule=Host(`api-frontend.example.com`)"
@@ -61,7 +61,7 @@ services:
 
   sidekiq-worker:
     build: ./backend
-    container_name: base-sidekiq
+    container_name: nexus-sidekiq
     volumes:
       - ./backend:/rails
       - ./backend/tmp:/rails/tmp
@@ -84,10 +84,10 @@ services:
     command: bash -c "bundle install && bundle exec sidekiq"
     # Postgres/Redis are external in production; ensure env vars point to those services.
     networks:
-      - base_network
+      - nexus_network
 
 volumes:
   rails_bundle:
 networks:
-  base_network:
+  nexus_network:
     driver: bridge
