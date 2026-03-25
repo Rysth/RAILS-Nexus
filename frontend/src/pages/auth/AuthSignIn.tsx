@@ -56,7 +56,9 @@ export default function AuthSignIn() {
     if (user && !isOtpRequired) {
       const canAccessDashboard = hasPermission(Permissions.VIEW_DASHBOARD);
 
-      navigate(canAccessDashboard ? "/dashboard" : "/", { replace: true });
+      navigate(canAccessDashboard ? "/dashboard" : "/auth/signin", {
+        replace: true,
+      });
     }
   }, [user, navigate, isOtpRequired, hasPermission]);
 

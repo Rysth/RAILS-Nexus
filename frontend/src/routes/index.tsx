@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import RootLayout from "../layouts/RootLayout";
 import AuthLayout from "../layouts/AuthLayout";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -22,9 +26,8 @@ import { Permissions } from "../types/auth";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout />,
+    element: <Navigate to="/auth/signin" replace />,
     errorElement: <ErrorBoundary />,
-    children: [{ index: true, element: <Home /> }],
   },
   {
     path: "auth",
