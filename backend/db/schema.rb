@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_19_000001) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_25_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -87,6 +87,19 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_19_000001) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "clients", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "identification_type", default: "05", null: false
+    t.string "identification"
+    t.string "email"
+    t.string "phone"
+    t.text "address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_clients_on_email"
+    t.index ["identification"], name: "index_clients_on_identification", unique: true, where: "((identification IS NOT NULL) AND ((identification)::text <> ''::text))"
+  end
+
   create_table "otp_codes", force: :cascade do |t|
     t.bigint "account_id", null: false
     t.string "code", limit: 6, null: false
@@ -107,6 +120,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_19_000001) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_permissions_on_key", unique: true
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.bigint "client_id", null: false
+    t.string "name", null: false
+    t.string "production_url"
+    t.date "start_date"
+    t.integer "status", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["client_id"], name: "index_projects_on_client_id"
+    t.index ["status"], name: "index_projects_on_status"
   end
 
   create_table "role_permissions", force: :cascade do |t|
@@ -156,6 +181,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_19_000001) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "otp_codes", "accounts"
+  add_foreign_key "projects", "clients"
   add_foreign_key "role_permissions", "permissions"
   add_foreign_key "role_permissions", "roles"
   add_foreign_key "users", "accounts"
