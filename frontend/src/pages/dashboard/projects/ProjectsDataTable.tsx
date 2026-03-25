@@ -8,7 +8,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, Plus, X } from "lucide-react";
+import { ChevronDown, Plus, X, FolderKanban } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +25,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import Pagination from "../../../components/common/Pagination";
 import SearchBar from "../../../components/common/SearchBar";
 import { PROJECT_STATUSES } from "../../../types/project";
@@ -181,9 +188,31 @@ export function ProjectsDataTable<TData, TValue>({
       </div>
 
       {/* Data Table */}
-      <Card className="p-0 rounded-xl">
-        <CardContent className="p-0 !border-none border-transparent rounded-none">
-          <div className="bg-white !border-transparent">
+      <Card className="rounded-xl">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <FolderKanban className="size-5 text-muted-foreground" />
+              <div>
+                <CardTitle className="text-base">
+                  Listado de Proyectos
+                </CardTitle>
+                <CardDescription>
+                  {pagination
+                    ? `Mostrando ${data.length} de ${pagination.totalCount} resultados`
+                    : `${data.length} proyectos`}
+                </CardDescription>
+              </div>
+            </div>
+            {pagination && (
+              <Badge variant="secondary" className="tabular-nums">
+                Página {pagination.currentPage + 1} de {pagination.pageCount}
+              </Badge>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="bg-white">
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -203,20 +232,21 @@ export function ProjectsDataTable<TData, TValue>({
               </TableHeader>
               <TableBody>
                 {isLoading ? (
-                  <TableRow>
-                    <TableCell
-                      colSpan={columns.length}
-                      className="h-24 text-center"
-                    >
-                      <div className="flex items-center justify-center gap-2">
-                        <div className="w-4 h-4 border-2 border-gray-300 rounded-full animate-spin border-t-gray-600" />
-                        Cargando proyectos...
-                      </div>
-                    </TableCell>
-                  </TableRow>
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <TableRow key={i}>
+                      {columns.map((_, j) => (
+                        <TableCell key={j}>
+                          <div className="h-4 rounded bg-muted animate-pulse" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
                 ) : table.getRowModel().rows?.length ? (
                   table.getRowModel().rows.map((row) => (
-                    <TableRow key={row.id}>
+                    <TableRow
+                      key={row.id}
+                      className="hover:bg-muted/50 transition-colors"
+                    >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>
                           {flexRender(
@@ -231,9 +261,17 @@ export function ProjectsDataTable<TData, TValue>({
                   <TableRow>
                     <TableCell
                       colSpan={columns.length}
-                      className="h-24 text-center"
+                      className="h-32 text-center"
                     >
-                      No se encontraron proyectos.
+                      <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                        <FolderKanban className="size-8 opacity-40" />
+                        <p className="font-medium">
+                          No se encontraron proyectos
+                        </p>
+                        <p className="text-sm">
+                          Intenta ajustar los filtros de búsqueda.
+                        </p>
+                      </div>
                     </TableCell>
                   </TableRow>
                 )}

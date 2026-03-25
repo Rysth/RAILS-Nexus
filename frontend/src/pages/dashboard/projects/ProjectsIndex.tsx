@@ -1,4 +1,4 @@
-import { useEffect, useRef, useReducer } from "react";
+import { useEffect, useRef, useReducer, useMemo } from "react";
 import { useAuthStore } from "../../../stores/authStore";
 import { useProjectStore } from "../../../stores/projectStore";
 import { useClientStore } from "../../../stores/clientStore";
@@ -8,6 +8,8 @@ import { createProjectsColumns } from "./ProjectsColumns";
 import ProjectsDelete from "./ProjectsDelete";
 import ProjectsCreate from "./ProjectsCreate";
 import ProjectsEdit from "./ProjectsEdit";
+import { StatsCard } from "@/components/ui/stats-card";
+import { FolderKanban, Activity, Wrench, XCircle } from "lucide-react";
 import type { Project } from "../../../types/project";
 
 // ── State & Reducer ─────────────────────────────────────────
@@ -141,8 +143,62 @@ export default function ProjectsIndex() {
     canDelete: !!canDeleteProjects,
   });
 
+  const stats = useMemo(() => {
+    const total = pagination?.total_count ?? projects.length;
+    const active = projects.filter((p) => p.status === "active").length;
+    const maintenance = projects.filter(
+      (p) => p.status === "maintenance",
+    ).length;
+    const canceled = projects.filter((p) => p.status === "canceled").length;
+    return { total, active, maintenance, canceled };
+  }, [projects, pagination]);
+
   return (
     <div className="space-y-6">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Proyectos</h1>
+        <p className="text-muted-foreground">
+          Visualiza y administra todos los proyectos de tus clientes.
+        </p>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatsCard
+          title="Total Proyectos"
+          value={stats.total}
+          icon={FolderKanban}
+          iconColor="text-blue-600"
+          iconBgColor="bg-blue-100"
+        />
+        <StatsCard
+          title="Activos"
+          value={stats.active}
+          description="en producción"
+          icon={Activity}
+          iconColor="text-emerald-600"
+          iconBgColor="bg-emerald-100"
+        />
+        <StatsCard
+          title="Mantenimiento"
+          value={stats.maintenance}
+          description="en soporte"
+          icon={Wrench}
+          iconColor="text-amber-600"
+          iconBgColor="bg-amber-100"
+        />
+        <StatsCard
+          title="Cancelados"
+          value={stats.canceled}
+          description="dados de baja"
+          icon={XCircle}
+          iconColor="text-red-600"
+          iconBgColor="bg-red-100"
+        />
+      </div>
+
+      {/* Data Table */}
       <ProjectsDataTable
         columns={columns}
         data={projects}

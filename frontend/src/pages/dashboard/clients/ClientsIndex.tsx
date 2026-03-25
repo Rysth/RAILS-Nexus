@@ -1,4 +1,4 @@
-import { useEffect, useRef, useReducer } from "react";
+import { useEffect, useRef, useReducer, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../stores/authStore";
 import { useClientStore } from "../../../stores/clientStore";
@@ -8,6 +8,8 @@ import { createClientsColumns } from "./ClientsColumns";
 import ClientsDelete from "./ClientsDelete";
 import ClientsCreate from "./ClientsCreate";
 import ClientsEdit from "./ClientsEdit";
+import { StatsCard } from "@/components/ui/stats-card";
+import { Users, FolderKanban, FileText, CreditCard } from "lucide-react";
 import type { Client } from "../../../types/client";
 
 // ── State & Reducer ─────────────────────────────────────────
@@ -148,8 +150,71 @@ export default function ClientsIndex() {
     canDeleteClients: !!canDeleteClients,
   });
 
+  const stats = useMemo(() => {
+    const total = pagination?.total_count ?? clients.length;
+    const withProjects = clients.filter((c) => c.projects_count > 0).length;
+    const totalProjects = clients.reduce((sum, c) => sum + c.projects_count, 0);
+    const idTypes = clients.reduce<Record<string, number>>((acc, c) => {
+      const label =
+        c.identification_type === "04"
+          ? "RUC"
+          : c.identification_type === "05"
+            ? "Cédula"
+            : "Pasaporte";
+      acc[label] = (acc[label] || 0) + 1;
+      return acc;
+    }, {});
+    const topIdType =
+      Object.entries(idTypes).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "—";
+    return { total, withProjects, totalProjects, topIdType };
+  }, [clients, pagination]);
+
   return (
     <div className="space-y-6">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Clientes</h1>
+        <p className="text-muted-foreground">
+          Gestiona tu cartera de clientes y sus proyectos asociados.
+        </p>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatsCard
+          title="Total Clientes"
+          value={stats.total}
+          icon={Users}
+          iconColor="text-blue-600"
+          iconBgColor="bg-blue-100"
+        />
+        <StatsCard
+          title="Con Proyectos"
+          value={stats.withProjects}
+          description={`de ${clients.length} clientes visibles`}
+          icon={FolderKanban}
+          iconColor="text-emerald-600"
+          iconBgColor="bg-emerald-100"
+        />
+        <StatsCard
+          title="Total Proyectos"
+          value={stats.totalProjects}
+          description="asociados a estos clientes"
+          icon={FileText}
+          iconColor="text-violet-600"
+          iconBgColor="bg-violet-100"
+        />
+        <StatsCard
+          title="Tipo Más Frecuente"
+          value={stats.topIdType}
+          description="tipo de identificación"
+          icon={CreditCard}
+          iconColor="text-amber-600"
+          iconBgColor="bg-amber-100"
+        />
+      </div>
+
+      {/* Data Table */}
       <ClientsDataTable
         columns={columns}
         data={clients}

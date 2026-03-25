@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Pencil, Trash2, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface ColumnsOptions {
   canEdit: boolean;
@@ -65,7 +66,12 @@ export function createProjectsColumns({
       accessorKey: "client_name",
       header: "Cliente",
       cell: ({ row }) => (
-        <span className="text-sm">{row.original.client_name}</span>
+        <Link
+          to={`/dashboard/clients/${row.original.client_id}`}
+          className="text-sm font-medium text-primary hover:underline"
+        >
+          {row.original.client_name}
+        </Link>
       ),
     },
     {
