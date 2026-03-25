@@ -1,0 +1,93 @@
+services:
+  client:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    container_name: base-client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - VITE_API_URL=${VITE_API_URL}
+    depends_on:
+      - server
+    networks:
+      - base_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`frontend.example.com`)"
+      - "traefik.http.routers.client.tls=true"
+      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
+      - "traefik.http.services.client.loadbalancer.server.port=5173"
+
+  server:
+    build: ./backend
+    container_name: base-api
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./backend:/rails
+      - ./backend/tmp:/rails/tmp
+      - rails_bundle:/usr/local/bundle
+    environment:
+      - FRONTEND_URL=${FRONTEND_URL}
+      - RAILS_ENV=${RAILS_ENV}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - "DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:5432/${DB_NAME}"
+      - REDIS_URL=${REDIS_URL}
+      - CLOUDFLARE_ENDPOINT=${CLOUDFLARE_ENDPOINT}
+      - CLOUDFLARE_ACCESS_KEY_ID=${CLOUDFLARE_ACCESS_KEY_ID}
+      - CLOUDFLARE_SECRET_ACCESS_KEY=${CLOUDFLARE_SECRET_ACCESS_KEY}
+      - CLOUDFLARE_BUCKET_NAME=${CLOUDFLARE_BUCKET_NAME}
+      - "SMTP_HOST=${SMTP_HOST}"
+      - "SMTP_PORT=${SMTP_PORT}"
+      - "SMTP_USER=${SMTP_USER}"
+      - "SMTP_PASSWORD=${SMTP_PASSWORD}"
+      - "SECRET_KEY_BASE=${SECRET_KEY_BASE}"
+    command: bash -c "bundle install && rm -f tmp/pids/server.pid && bundle exec rails db:migrate && bundle exec rails s -p ${PORT} -b '0.0.0.0'"
+    # Postgres is provided externally in production; ensure DATABASE_URL points to it.
+    networks:
+      - base_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.server.rule=Host(`api-frontend.example.com`)"
+      - "traefik.http.routers.server.tls=true"
+      - "traefik.http.routers.server.tls.certresolver=letsencrypt"
+      - "traefik.http.services.server.loadbalancer.server.port=${PORT}"
+
+  sidekiq-worker:
+    build: ./backend
+    container_name: base-sidekiq
+    volumes:
+      - ./backend:/rails
+      - ./backend/tmp:/rails/tmp
+      - rails_bundle:/usr/local/bundle
+    environment:
+      - FRONTEND_URL=${FRONTEND_URL}
+      - RAILS_ENV=${RAILS_ENV}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - "DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:5432/${DB_NAME}"
+      - REDIS_URL=${REDIS_URL}
+      - CLOUDFLARE_ENDPOINT=${CLOUDFLARE_ENDPOINT}
+      - CLOUDFLARE_ACCESS_KEY_ID=${CLOUDFLARE_ACCESS_KEY_ID}
+      - CLOUDFLARE_SECRET_ACCESS_KEY=${CLOUDFLARE_SECRET_ACCESS_KEY}
+      - CLOUDFLARE_BUCKET_NAME=${CLOUDFLARE_BUCKET_NAME}
+      - "SMTP_HOST=${SMTP_HOST}"
+      - "SMTP_PORT=${SMTP_PORT}"
+      - "SMTP_USER=${SMTP_USER}"
+      - "SMTP_PASSWORD=${SMTP_PASSWORD}"
+      - "SECRET_KEY_BASE=${SECRET_KEY_BASE}"
+    command: bash -c "bundle install && bundle exec sidekiq"
+    # Postgres/Redis are external in production; ensure env vars point to those services.
+    networks:
+      - base_network
+
+volumes:
+  rails_bundle:
+networks:
+  base_network:
+    driver: bridge
