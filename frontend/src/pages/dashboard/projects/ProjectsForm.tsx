@@ -25,7 +25,7 @@ export default function ProjectsForm({
     createProject,
     updateProject,
   } = useProjectStore();
-  const { clients } = useClientStore();
+  const { clients, fetchClients } = useClientStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const isEditing = !!project;
@@ -36,6 +36,13 @@ export default function ProjectsForm({
     reset,
     formState: { errors },
   } = useForm<ProjectFormData>();
+
+  // Ensure clients are loaded for the dropdown
+  useEffect(() => {
+    if (clients.length === 0) {
+      fetchClients(1, 100);
+    }
+  }, [clients.length, fetchClients]);
 
   useEffect(() => {
     if (isEditing && project) {
