@@ -10,7 +10,7 @@ module Api
 
       # GET /api/v1/quotes
       def index
-        @q = Quote.includes(project: :client).includes(:quote_items).ransack(search_params)
+        @q = Quote.includes(project: :client).ransack(search_params)
         @q.sorts = "id desc" if @q.sorts.empty?
 
         page = params[:page] || 1
@@ -69,6 +69,7 @@ module Api
       private
 
       def set_quote
+        # Using includes for project/client. For show/update/destroy, quote_items are often needed.
         @quote = Quote.includes(project: :client).includes(:quote_items).find(params[:id])
       rescue ActiveRecord::RecordNotFound
         render json: { status: :error, message: "Cotización no encontrada" }, status: :not_found
@@ -103,13 +104,13 @@ module Api
           valid_until: quote.valid_until,
           status: quote.status,
           total: quote.total.to_f,
-          items_count: quote.quote_items.size,
+          items_count: quote.quote_items_count,
           created_at: quote.created_at,
           updated_at: quote.updated_at
         }
 
         if include_items
-          data[:quote_items] = quote.quote_items.order(:id).map do |item|
+          data[:quote_items] = quote.quote_items.sort_by { |item| item.id || Float::INFINITY }.map do |item|
             {
               id: item.id,
               description: item.description,

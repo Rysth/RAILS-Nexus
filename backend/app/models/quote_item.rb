@@ -1,5 +1,5 @@
 class QuoteItem < ApplicationRecord
-  belongs_to :quote
+  belongs_to :quote, counter_cache: true
 
   validates :description, presence: { message: "La descripción es requerida" }
   validates :quantity, presence: true, numericality: { greater_than: 0, message: "La cantidad debe ser mayor a 0" }
